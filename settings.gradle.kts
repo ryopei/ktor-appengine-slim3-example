@@ -1,0 +1,1 @@
+rootProject.name = "ktor-appengine-slim3-example"
