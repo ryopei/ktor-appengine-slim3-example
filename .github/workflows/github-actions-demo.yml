@@ -23,4 +23,7 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - run: ./gradlew build
+      - run: ./gradlew nativeBuild
+      - name: List files in the native
+        run: |
+          ls ${{ github.workspace }}/build/native
