@@ -32,5 +32,5 @@ jobs:
           ls ${{ github.workspace }}/build/native/nativeCompile
       - uses: actions/download-artifact@v3
         with:
-          name: graal-server
-          path: {{ github.workspace }}/build/native/nativeCompile
+          name: 'graal-server'
+          path: "{{ github.workspace }}/build/native/nativeCompile"
