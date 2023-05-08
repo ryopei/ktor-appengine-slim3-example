@@ -9,9 +9,17 @@ jobs:
       contents: 'read'
       id-token: 'write'
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/582173357117/locations/global/workloadIdentityPools/deploying-from-github-actions/providers/my-provider'
+          service_account: 'deploy-from-github-actions@funyadb.iam.gserviceaccount.com'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          version: '>= 363.0.0'
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
       - name: Check out repository code
         uses: actions/checkout@v3
       - uses: graalvm/setup-graalvm@v1
@@ -20,17 +28,13 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: copy to staging
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          cp ${{ github.workspace }}/build/native/nativeCompile/graal-server ${{ github.workspace }}/staging
       - run: ./gradlew nativeBuild
       - name: List files in the native
         run: |
           ls ${{ github.workspace }}/build/native/nativeCompile
-      - uses: actions/download-artifact@v3
-        with:
-          name: 'graal-server'
-          path: "{{ github.workspace }}/build/native/nativeCompile"
+      - name: deploy
+        run: |
+          cd ${{ github.workspace }}/staging | gcloud app deploy app.yaml --project funyadb

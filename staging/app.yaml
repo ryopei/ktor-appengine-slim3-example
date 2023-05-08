@@ -1,0 +1,2 @@
+runtime: java17 # or another supported runtime
+entrypoint: ./graal-server
