@@ -32,6 +32,12 @@ jobs:
       - name: copy to staging
         run: |
           cp ${{ github.workspace }}/build/native/nativeCompile/graal-server ${{ github.workspace }}/staging
-      - name: deploy
-        run: |
-          cd ${{ github.workspace }}/staging | gcloud app deploy app.yaml --project funyadb
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-appengine@v1'
+        with:
+          credentials: ${{ steps.auth.outputs.credentials }}
+          project_id: 'funyadb'
+          promote: true
+          version: 'v1'
+          app: 'funyadb'
+          working_directory: '${{ github.workspace }}/staging'
