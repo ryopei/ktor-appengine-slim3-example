@@ -35,9 +35,6 @@ jobs:
       - id: 'deploy'
         uses: 'google-github-actions/deploy-appengine@v1'
         with:
-          credentials: ${{ steps.auth.outputs.credentials }}
           project_id: 'funyadb'
           promote: true
-          version: 'v1'
-          app: 'funyadb'
           working_directory: '${{ github.workspace }}/staging'
