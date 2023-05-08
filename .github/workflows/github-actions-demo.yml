@@ -14,8 +14,8 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: 'projects/582173357117/locations/global/workloadIdentityPools/deploying-from-github-actions/providers/my-provider'
-          service_account: 'deploy-from-github-actions@funyadb.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/582173357117/locations/global/workloadIdentityPools/deploy-pool/providers/my-provider'
+          service_account: 'deploy-service-account@funyadb.iam.gserviceaccount.com'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
         with:
