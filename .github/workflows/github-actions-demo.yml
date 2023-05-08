@@ -28,13 +28,10 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ./gradlew nativeBuild
       - name: copy to staging
         run: |
           cp ${{ github.workspace }}/build/native/nativeCompile/graal-server ${{ github.workspace }}/staging
-      - run: ./gradlew nativeBuild
-      - name: List files in the native
-        run: |
-          ls ${{ github.workspace }}/build/native/nativeCompile
       - name: deploy
         run: |
           cd ${{ github.workspace }}/staging | gcloud app deploy app.yaml --project funyadb
